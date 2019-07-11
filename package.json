@@ -1,0 +1,18 @@
+{
+  "name": "deviget",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --watchAll"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jest": "^24.8.0"
+  },
+  "jest": {
+    "verbose": true,
+    "setupFilesAfterEnv": ["./api/tests/setup.js", "./setup.js"]
+  }
+}
