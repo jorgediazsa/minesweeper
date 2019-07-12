@@ -4,15 +4,27 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "start": "node index.js",
+    "server": "nodemon index.js",
+    "client": "npm run start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "jest": "^24.8.0"
+    "body-parser": "^1.19.0",
+    "concurrently": "^4.1.1",
+    "express": "^4.17.1",
+    "jest": "^24.8.0",
+    "nodemon": "^1.19.1"
   },
   "jest": {
     "verbose": true,
-    "setupFilesAfterEnv": ["./api/tests/setup.js", "./setup.js"]
+    "setupFilesAfterEnv": [
+      "./api/tests/setup.js",
+      "./tests/setup.js"
+    ]
   }
 }

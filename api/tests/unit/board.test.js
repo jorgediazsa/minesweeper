@@ -142,5 +142,5 @@ describe('when creating a board', () => {
 
 describe('when revealing a cell', () => {
   const board = new Board()
-  console.log(board.reveal(1, 2))
+  // console.log(board.reveal(1, 2))
 })
