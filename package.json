@@ -25,6 +25,10 @@
     "setupFilesAfterEnv": [
       "./api/tests/setup.js",
       "./tests/setup.js"
+    ],
+    "testPathIgnorePatterns": [
+      "./client/"
     ]
-  }
+  },
+  "devDependencies": {}
 }
