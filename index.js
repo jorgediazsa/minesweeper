@@ -5,7 +5,6 @@ const boardRouter = require('./routes/boardRouter')
 
 const app = express()
 
-
 app.use(bodyParser.json())
 
 app.use('/board', boardRouter)

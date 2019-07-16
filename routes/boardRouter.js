@@ -26,8 +26,9 @@ boardRouter
 boardRouter
   .post('/reveal', (req, res) => {
     const board = new Board(req.body.board)
+    // console.log(board.cache)
     const result = board.reveal(req.body.x, req.body.y)
-    console.log(board.board)
+    // console.log(board.board)
     const response = {
       board: board.board,
       status: 'playing'

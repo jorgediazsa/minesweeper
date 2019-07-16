@@ -2,9 +2,14 @@ const Cell = require('./cell')
 
 class Board {
   constructor(board = null, difficulty = 'easy', size = 8) {
+    
+
     if (board) {
+      this.cache = Array.from({length: board.length}, (_) => Array.from({length: board.length}, (_) => 0))
+      this.size = board.length
       this.board = board
     } else {
+      this.cache = Array.from({length: this.size}, (_) => Array.from({length: this.size}, (_) => 0))
       this.difficulty = difficulty
       this.size = size
 
@@ -12,7 +17,6 @@ class Board {
       this.board = Array.from({length: this.size}, (_) => Array.from({length: this.size}, (_) => new Cell()))
       
       this.setMines()
-      // console.log(this.board)
     }
   }
 
@@ -127,12 +131,107 @@ class Board {
     }
   }
 
+  broadcastReveal(row, column) {
+    //visited
+    if (this.cache[row][column] === 1) return
+    //number
+    if (this.board[row][column].value > 0) {
+      this.cache[row][column] = 1
+      const cell = new Cell('revealed', this.board[row][column].value)
+      this.board[row][column] = cell
+      return
+    }
+
+    this.cache[row][column] = 1
+    const cell = new Cell('revealed', this.board[row][column].value)
+    this.board[row][column] = cell
+
+    /**
+     *    + * *
+     *    * B *
+     *    * * *
+     */
+    if(!this.isOutOfBoardOrBomb(row - 1, column - 1)) {
+      this.broadcastReveal(row - 1, column - 1)
+    }
+
+    /**
+     *    * + *
+     *    * B *
+     *    * * *
+     */
+    if(!this.isOutOfBoardOrBomb(row - 1, column)) {
+      this.broadcastReveal(row - 1, column)
+    }
+
+    /**
+     *    * * +
+     *    * B *
+     *    * * *
+     */
+    if(!this.isOutOfBoardOrBomb(row - 1, column + 1)) {
+      this.broadcastReveal(row - 1, column + 1)
+    }
+
+    /**
+     *    * * *
+     *    + B *
+     *    * * *
+     */
+    if(!this.isOutOfBoardOrBomb(row, column - 1)) {
+      this.broadcastReveal(row, column - 1)
+    }
+
+    /**
+     *    * * *
+     *    * B +
+     *    * * *
+     */
+    if(!this.isOutOfBoardOrBomb(row, column + 1)) {
+      this.broadcastReveal(row, column + 1)
+    }
+
+    /**
+     *    * * *
+     *    * B *
+     *    + * *
+     */
+    if(!this.isOutOfBoardOrBomb(row + 1, column - 1)) {
+      this.broadcastReveal(row + 1, column - 1)
+    }
+
+    /**
+     *    * * *
+     *    * B *
+     *    * + *
+     */
+    if(!this.isOutOfBoardOrBomb(row + 1, column)) {
+      this.broadcastReveal(row + 1, column)
+    }
+
+    /**
+     *    * * *
+     *    * B *
+     *    * * +
+     */
+    if(!this.isOutOfBoardOrBomb(row + 1, column + 1)) {
+      this.broadcastReveal(row + 1, column + 1)
+    }
+  }
+
   reveal(row, column) {
     const cell = new Cell('revealed', this.board[row][column].value)
     this.board[row][column] = cell
+
     if (this.board[row][column].value === -1) {
       return false
     }
+    
+    if (this.board[row][column].value === 0) {
+      this.broadcastReveal(row, column)
+      this.cache = Array.from({length: this.size}, (_) => Array.from({length: this.size}, (_) => 0))
+    }
+
     return true
   }
 
