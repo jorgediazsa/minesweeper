@@ -8,6 +8,7 @@ import axios from 'axios'
 
 import Form from './Form'
 import Board from './Board'
+import { getData, setData } from '../utils/common'
 
 const engine = new Styletron();
 
@@ -16,8 +17,8 @@ export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      playing: false,
-      board: null
+      playing: getData('playing'),
+      board: getData('board')
     }
   }
 
@@ -27,6 +28,10 @@ export default class App extends Component {
     }
     axios.post(`/board/new/`, payload)
       .then(response => {
+
+        setData('playing', true)
+        setData('board', response.data.board)
+
         this.setState({
           playing: true,
           board: response.data.board
@@ -46,6 +51,11 @@ export default class App extends Component {
     }
     axios.post(`/board/reveal`, payload)
       .then(response => {
+
+        
+        setData('playing', response.data.status === 'playing')
+        setData('board', response.data.board)
+
         this.setState({
           playing: response.data.status === 'playing',
           board: response.data.board

@@ -11,28 +11,32 @@ class Board extends Component {
     }
   }
 
+  renderCell = (rows, x) => {
+    return (
+      <tr key={`tr-${x}`}>
+        {rows.map((cell, y) => 
+          <td key={`td-${x}${y}`}>
+            <Cell
+              key={`cell-${x}${y}`}
+              x={x}
+              y={y}
+              status={cell.status}
+              value={cell.value}
+              handleCellClick={this.props.handleCellClick}
+              playing={this.props.playing}
+            />
+          </td>
+        )}
+      </tr>
+    ) 
+  }
+
   renderBoard = (board) => {
     return (
       <table>
-        {board.map((rows, x) => {
-          return (
-            <tr>
-              {rows.map((cell, y) => 
-                <td>
-                  <Cell
-                    key={`${x}${y}`}
-                    x={x}
-                    y={y}
-                    status={cell.status}
-                    value={cell.value}
-                    handleCellClick={this.props.handleCellClick}
-                    playing={this.props.playing}
-                  />
-                </td>
-              )}
-            </tr>
-          )
-        })}
+        <tbody>
+          {board.map((rows, x) => this.renderCell(rows, x))}
+        </tbody>
       </table>
     )
   }
