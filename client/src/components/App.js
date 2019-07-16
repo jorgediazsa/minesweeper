@@ -1,27 +1,88 @@
-import React from 'react';
+import React, { Component } from 'react'
+import { HeaderNavigation } from "baseui/header-navigation"
+import { Block } from "baseui/block"
 import {Client as Styletron} from 'styletron-engine-atomic';
 import {Provider as StyletronProvider} from 'styletron-react';
-import {LightTheme, BaseProvider, styled} from 'baseui';
-import {StatefulInput} from 'baseui/input';
+import {LightTheme, BaseProvider} from 'baseui';
+import axios from 'axios'
+
+import Form from './Form'
+import Board from './Board'
 
 const engine = new Styletron();
 
-const Centered = styled('div', {
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '100%',
-});
+export default class App extends Component {
 
-export default function App() {
-  return (
-    <StyletronProvider value={engine}>
-      <BaseProvider theme={LightTheme}>
-        <Centered>
-          <StatefulInput />
-        </Centered>
-      </BaseProvider>
-    </StyletronProvider>
-  );
+  constructor(props) {
+    super(props)
+    this.state = {
+      playing: false,
+      board: null
+    }
+  }
+
+  handleNewGame = (difficulty) => {
+    const payload = {
+      difficulty
+    }
+    axios.post(`/board/new/`, payload)
+      .then(response => {
+        this.setState({
+          playing: true,
+          board: response.data.board
+        })
+        console.log(response.data.board)
+      })
+      .catch(error => {
+        console.error(error)
+      });
+  }
+
+  handleCellClick = (x, y) => {
+    const payload = {
+      board: this.state.board,
+      x,
+      y
+    }
+    axios.post(`/board/reveal`, payload)
+      .then(response => {
+        this.setState({
+          playing: response.data.status === 'playing',
+          board: response.data.board
+        })
+        console.log(response.data.board)
+      })
+      .catch(error => {
+        console.error(error)
+      });
+  }
+
+  render() {
+
+    const { board, playing } = this.state
+
+    return (
+      <StyletronProvider value={engine}>
+        <BaseProvider theme={LightTheme}>
+          <HeaderNavigation>
+            <Form handleNewGame={this.handleNewGame} />
+          </HeaderNavigation>
+          <Block
+            display="block"
+            gridTemplateColumns="repeat(auto-fill, minmax(280px, 1fr))"
+            justifyItems="center"
+            gridGap="scale1000"
+            margin="scale1000"
+          >
+            <Board
+              board={board}
+              handleCellClick={this.handleCellClick}
+              playing={playing}
+            />
+          </Block>
+        </BaseProvider>
+      </StyletronProvider>
+    )
+  }
 }
 

@@ -1,0 +1,14 @@
+.cell {
+  float: left;
+  width: 20px;
+  height: 20px;
+  background-color: blue;
+  color: white;
+  font-family: 'Courier New', Courier, monospace;
+  size: 20px;
+  text-align: center;
+  font-weight: bold;
+  vertical-align: middle;
+  cursor: pointer;
+  padding-top: 2px;
+}

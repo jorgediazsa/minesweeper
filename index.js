@@ -1,11 +1,14 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 
+const boardRouter = require('./routes/boardRouter')
+
 const app = express()
+
 
 app.use(bodyParser.json())
 
-require('./routes/boardRoutes')(app)
+app.use('/board', boardRouter)
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'))

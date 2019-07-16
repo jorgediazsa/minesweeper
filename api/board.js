@@ -1,7 +1,7 @@
 const Cell = require('./cell')
 
 class Board {
-  constructor(board = null, difficulty = 'easy', size = 5) {
+  constructor(board = null, difficulty = 'easy', size = 8) {
     if (board) {
       this.board = board
     } else {
@@ -22,13 +22,13 @@ class Board {
   
     switch(this.difficulty) {
       case 'easy':
-        mines = Math.floor(30 * cells / 100)
+        mines = Math.floor(15 * cells / 100)
         break
       case 'medium':
-          mines = Math.floor(50 * cells / 100)
+          mines = Math.floor(20 * cells / 100)
         break
       case 'hard':
-          mines = Math.floor(80 * cells / 100)
+          mines = Math.floor(40 * cells / 100)
         break
     }
   
@@ -128,8 +128,12 @@ class Board {
   }
 
   reveal(row, column) {
-    
-    return this.board[row][column]
+    const cell = new Cell('revealed', this.board[row][column].value)
+    this.board[row][column] = cell
+    if (this.board[row][column].value === -1) {
+      return false
+    }
+    return true
   }
 
 }
