@@ -12,3 +12,9 @@
   cursor: pointer;
   padding-top: 2px;
 }
+
+.cell-revealed {
+  background-color: rgb(229, 229, 229);
+  cursor: auto;
+  color: black;
+}
