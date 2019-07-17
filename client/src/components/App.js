@@ -8,6 +8,7 @@ import axios from 'axios'
 
 import Form from './Form'
 import Board from './Board'
+import Message from './Message'
 import { getData, setData } from '../utils/common'
 
 const engine = new Styletron();
@@ -17,7 +18,7 @@ export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      playing: getData('playing'),
+      gameStatus: getData('gameStatus'),
       board: getData('board')
     }
   }
@@ -29,14 +30,13 @@ export default class App extends Component {
     axios.post(`/board/new/`, payload)
       .then(response => {
 
-        setData('playing', true)
+        setData('gameStatus', response.data.status)
         setData('board', response.data.board)
 
         this.setState({
-          playing: true,
+          gameStatus: response.data.status,
           board: response.data.board
         })
-        console.log(response.data.board)
       })
       .catch(error => {
         console.error(error)
@@ -52,15 +52,13 @@ export default class App extends Component {
     axios.post(`/board/reveal`, payload)
       .then(response => {
 
-        
-        setData('playing', response.data.status === 'playing')
+        setData('gameStatus', response.data.status)
         setData('board', response.data.board)
 
         this.setState({
-          playing: response.data.status === 'playing',
+          gameStatus: response.data.status,
           board: response.data.board
         })
-        console.log(response.data.board)
       })
       .catch(error => {
         console.error(error)
@@ -69,7 +67,7 @@ export default class App extends Component {
 
   render() {
 
-    const { board, playing } = this.state
+    const { board, gameStatus } = this.state
 
     return (
       <StyletronProvider value={engine}>
@@ -84,10 +82,13 @@ export default class App extends Component {
             gridGap="scale1000"
             margin="scale1000"
           >
+            <Message
+              gameStatus={gameStatus}
+            />
             <Board
               board={board}
               handleCellClick={this.handleCellClick}
-              playing={playing}
+              gameStatus={gameStatus}
             />
           </Block>
         </BaseProvider>

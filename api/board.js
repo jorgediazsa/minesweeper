@@ -2,7 +2,6 @@ const Cell = require('./cell')
 
 class Board {
   constructor(board = null, difficulty = 'easy', size = 8) {
-    
 
     if (board) {
       this.cache = Array.from({length: board.length}, (_) => Array.from({length: board.length}, (_) => 0))
@@ -233,6 +232,18 @@ class Board {
     }
 
     return true
+  }
+
+  playing() {
+    for (let row = 0; row < this.board.length; row++) {
+      for (let column = 0; column < this.board.length; column++) {
+        if (this.board[row][column].value >= 0 && this.board[row][column].status === 'hidden') {
+          return true
+        }
+      }
+    }
+    //you won!
+    return false
   }
 
 }

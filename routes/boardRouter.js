@@ -26,15 +26,16 @@ boardRouter
 boardRouter
   .post('/reveal', (req, res) => {
     const board = new Board(req.body.board)
-    // console.log(board.cache)
     const result = board.reveal(req.body.x, req.body.y)
-    // console.log(board.board)
     const response = {
       board: board.board,
       status: 'playing'
     }
     if (!result) {
-      response.status = 'lost'
+      response.status = 'lose'
+    }
+    if (!board.playing()) {
+      response.status = 'won'
     }
     res.send(response)
   })

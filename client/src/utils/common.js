@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 import CryptoJS from 'crypto-js'
 
-const incrementalKey = 1
+const incrementalKey = 2
 
 const token = crypto.createCipher('aes-128-cbc', incrementalKey.toString()).final('hex')
 

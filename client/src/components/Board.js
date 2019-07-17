@@ -23,7 +23,7 @@ class Board extends Component {
               status={cell.status}
               value={cell.value}
               handleCellClick={this.props.handleCellClick}
-              playing={this.props.playing}
+              gameStatus={this.props.gameStatus}
             />
           </td>
         )}
