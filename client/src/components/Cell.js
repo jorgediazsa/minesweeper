@@ -31,11 +31,23 @@ class Cell extends Component {
     e.preventDefault()
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (
+        (prevProps.gameStatus === 'won' ||
+        prevProps.gameStatus === 'lose') &&
+        this.props.gameStatus === 'playing'
+      ) {
+        this.setState({
+          status: 'hidden'
+        })
+      }
+  }
+  
   render() {
     const { handleCellClick, x, y, value, gameStatus } = this.props
 
     let { status } = this.state
-    
+
     if (this.props.status === 'revealed') {
       status = this.props.status
     }
@@ -43,7 +55,7 @@ class Cell extends Component {
     return (
       <div
         className={`cell ${status === 'revealed' ? `cell-revealed` : `` }`}
-        onClick={() => {if (status === "hidden") {handleCellClick(x, y)}}}
+        onClick={() => {if (status === "hidden" && gameStatus === 'playing') {handleCellClick(x, y)}}}
         onContextMenu={(e) => this.handleRightClick(e)}
       >
         {this.renderIcon(status, value, gameStatus)}
