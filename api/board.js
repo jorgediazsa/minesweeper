@@ -25,13 +25,13 @@ class Board {
   
     switch(this.difficulty) {
       case 'easy':
-        mines = Math.floor(15 * cells / 100)
+        mines = Math.floor(10 * cells / 100)
         break
       case 'medium':
-          mines = Math.floor(20 * cells / 100)
+          mines = Math.floor(15 * cells / 100)
         break
       case 'hard':
-          mines = Math.floor(40 * cells / 100)
+          mines = Math.floor(20 * cells / 100)
         break
     }
   
